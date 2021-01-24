@@ -1,0 +1,21 @@
+{% load static %}
+<div id="social-links-edit" class="modal">
+  <div class="modal-content-social-link">
+    <h4 class="text-center mb-4">Удалить ссылки</h4>
+    <div id="social-links-edit-list" class="container">
+      {% for link in author.social_links.all %}
+        <div class="row mb-4">
+          <div class="col-4">
+            <img id="image-for-edit" src="" alt="" style="width: 25px" data-cat-link-type="{{ link.link_type }}">
+          </div>
+          <div class="col-4">
+            <a href="{{ link.link }}">{{ link.link_type }}</a>
+          </div>
+          <div class="col-4">
+            <a href="{% url 'delete_social_link' author.id link.id %}"><img class="social-link-delete" src="{% static 'images/bin-icon.png' %}" alt="" style="width: 25px;"></a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

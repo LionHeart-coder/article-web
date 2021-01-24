@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}
+  Записи сообщества {{ group.title }}
+{% endblock title %}
+{% block header %}{{ group.title }}{% endblock header %}
+{% block content %}
+  <p>
+    {{ group.description|linebreaksbr }}
+  </p>
+  {% for post in page %}
+    {% include "posts/includes/post_item.html" %}
+    <hr>
+  {% endfor %}
+  {% if page.has_other_pages %}
+    <div class="container">
+      <div class="d-flex justify-content-center">
+        {% include 'includes/paginator.html' with items=page paginator=paginator %}
+      </div>
+    </div>
+  {% endif %}
+{% endblock content %}

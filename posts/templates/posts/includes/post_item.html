@@ -1,0 +1,59 @@
+{% load static %}
+<div class="card mb-3 mt-1 shadow-sm" id="post_{{ post.id }}">
+  {% load thumbnail %}
+  {% thumbnail post.image "960x339" crop="center" as im %}
+    <img alt="" class="card-img" src="{{ im.url }}"/>
+  {% endthumbnail %}
+  <div class="card-body">
+    <p class="d-inline-block card-text">
+      <a href="{% url 'profile' post.author.username %}">
+        <strong class="d-block text-gray-dark">@{{ post.author }}</strong>
+      </a>
+      {{ post.text|linebreaksbr }}
+    </p>
+
+    {% if post.group %}
+      <br>
+      <a class="badge badge-pill badge-secondary" href="{% url 'group' post.group.slug %}" style="margin-bottom: 5px;">
+        #{{ post.group }}
+      </a>
+    {% endif %}
+
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="btn-toolbar">
+        {% if user == post.author %}
+          <a class="btn btn-sm btn-info text-white" onclick="manageWindow({{ post.id }})" role="button">
+            Редактировать
+          </a>
+        {% endif %}
+      </div>
+    </div>
+    <hr>
+    {% include "posts/includes/likes.html" %}
+    <div class="float-right mt-1">
+      <small class="text-muted">{{ post.pub_date|date:"d E Y H:i" }}</small>
+    </div>
+  </div>
+  <hr class="mt-0">
+</div>
+
+
+<div id="manageModel_{{ post.id }}" class="modal">
+  <div class="modal-content">
+    <span id="close-manage_{{ post.id }}" class="close">&times;</span>
+    <h3>Выберите действие:</h3>
+    <a class="btn btn-primary mt-2" href="{% url 'post_edit' post.author.username post.id %}">Изменить содержание</a>
+    <a class="btn btn-danger mt-2 text-white" onclick="confirmWindow({{ post.id }})">Удалить пост</a>
+  </div>
+</div>
+
+<div id="confirmationModel_{{ post.id }}" class="modal">
+  <div class="modal-content" style="width: 30%">
+    <h3>Вы действительно хотите безвозвратно удалить пост?</h3>
+    <div class="mt-4 ml-auto inline-group">
+      <a class="btn btn-danger" id="delete-post"
+         href="{% url 'delete_post' post.author.username post.id %}?next={{ request.get_full_path }}">Удалить пост</a>
+      <a id="close-confirmation_{{ post.id }}" class="btn btn-primary text-white">Отмена</a>
+    </div>
+  </div>
+</div>

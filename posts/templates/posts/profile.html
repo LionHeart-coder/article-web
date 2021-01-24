@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load user_filters %}
+{% block title %}Профиль{% endblock title %}
+{% block content %}
+  <div class="row">
+    <div class="col-md-3 mb-3 mt-1">
+      <div class="card">
+        <div class="card-body">
+          <div class="h2">
+            <!-- Имя автора -->
+            {{ author.get_full_name }}
+          </div>
+          <div class="h3 text-muted">
+            <!-- username автора -->
+            @{{ author.username }}
+          </div>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <div class="h6 text-muted">
+              Подписчиков: {{ author.following.count }} <br/>
+              Подписан: {{ author.follower.count }}
+            </div>
+          </li>
+          <li class="list-group-item">
+            <div class="h6 text-muted">
+              <!-- Количество записей -->
+              Записей: {{ author.posts.count }}
+            </div>
+          </li>
+          {% if user != author %}
+            <li class="list-group-item">
+              {% if is_following %}
+                <a class="btn btn-lg btn-light"
+                   href="{% url 'profile_unfollow' author.username %}" role="button">
+                  Отписаться
+                </a>
+              {% else %}
+                <a class="btn btn-lg btn-primary"
+                   href="{% url 'profile_follow' author.username %}" role="button">
+                  Подписаться
+                </a>
+              {% endif %}
+            </li>
+          {% endif %}
+          <li class="list-group-item">
+            <div class="h6 text-muted">
+              Ссылки на соцсети:
+            </div>
+
+            {% include 'posts/includes/social_link_list.html' %}
+
+            {% if request.user == author %}
+              <div class="inline-group text-center">
+                <input id="social-link-edit-button" type="button" class="btn btn-sm btn-light" value="Изменить">
+              </div>
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+      <div id="notification-social-link" class="text-center alert alert-info mt-2 notification">
+        <p>Ссылка была успешно добавлена.</p>
+      </div>
+    </div>
+
+    <div class="col-md-9">
+
+      <!-- Начало блока с отдельным постом -->
+      {% for post in page %}
+        {% include 'posts/includes/post_item.html' with post=post %}
+        <!-- Конец блока с отдельным постом -->
+        <!-- Остальные посты -->
+      {% endfor %}
+      <!-- Здесь постраничная навигация паджинатора -->
+      {% if page.has_other_pages %}
+        {% include 'includes/paginator.html' with items=page paginator=paginator %}
+      {% endif %}
+    </div>
+  </div>
+  {% include 'posts/includes/social-link-form-popup.html' %}
+  {% include 'posts/includes/social-link-edit-popup.html' %}
+  <script src="{% static 'js/add_social_link.js' %}"></script>
+{% endblock content %}

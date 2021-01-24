@@ -1,0 +1,17 @@
+{% load static %}
+<div id="post-like-{{ post.id }}" class="d-flex row ml-1 mt-1 mb-0 float-left justify-content-between"
+     style="width: 120px;">
+  <button id="ajax_{{ post.id }}" onclick="addLike({{ post.id }})" data-catusername="{{ post.author.username }}"
+          data-cat-is-authenticated="{{ user.is_authenticated }}" class="post-like">
+    {% if post.liked %}
+      <img id="like-img-{{ post.id }}" src="{% static 'images/like-active.png' %}" alt="" style="width: 30px">
+    {% else %}
+      <img id="like-img-{{ post.id }}" src="{% static 'images/like.png' %}" alt="" style="width: 30px">
+    {% endif %}
+    <span id="number-of-likes-{{ post.id }}" style="color: gray">{{ post.likes.count }}</span>
+  </button>
+  <a href="{% url 'post' post.author.username post.id %}" style="text-decoration: none">
+    <img src="{% static 'images/comment.png' %}" alt="" style="width: 30px">
+    <span style="color: gray" id="number-of-comments">{{ post.comments.count }}</span>
+  </a>
+</div>

@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Страница поста{% endblock title %}
+{% block content %}
+  {% include 'posts/includes/post_item.html' with post=post author=post.author %}
+  {% include 'posts/comments.html' with post=post comments=post.comments.all %}
+{% endblock content %}

@@ -1,0 +1,31 @@
+{% load user_filters %}
+<div id="social-link-form" class="modal" data-cat-id="{{ author.id }}">
+  <div id="content" class="modal-content-social-link">
+    <form method="post" id="social-link-fields">
+      {% csrf_token %}
+      {% for field in social_link_form %}
+        <div id="{{ field.id_for_label }}-field" class="form-group row">
+          <label for="{{ field.id_for_label }}" class="col-md-10 col-form-label text-md-left">
+            {{ field.label }}{% if field.field.required %}<span class="required">*</span>{% endif %}
+          </label>
+          <div class="col-md-10">
+            {{ field|addclass:"form-control" }}
+            {% if field.help_text %}
+              <small id="{{ field.id_for_label }}-help" class="form-text text-muted"
+                     style="margin-left: 6%; display: list-item; list-style: initial">
+                {{ field.help_text|safe }}
+              </small>
+            {% endif %}
+            {% if form.errors %}
+              <div class="alert alert-danger" role="alert">
+                {{ form.errors }}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </form>
+    <input id="social-link-form-submit" type="button" class="btn btn-sm btn-secondary" value="Создать">
+    <div id="social-links-form-errors" class="mt-2"></div>
+  </div>
+</div>

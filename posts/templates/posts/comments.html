@@ -1,0 +1,96 @@
+{% load static %}
+{% load user_filters %}
+{% load post_filters %}
+<div id="comments">
+  {% if user.is_authenticated %}
+    <div class="card my-4">
+      <form method="POST" id="comment-form" name="some-name">
+        {% csrf_token %}
+        <h5 class="card-header">Добавить комментарий:</h5>
+        <div class="card-body">
+          <div class="form-group">
+            {{ form.text|addclass:"form-control" }}
+          </div>
+          {% if form.text.help_text %}
+            <small id="{{ field.id_for_label }}-help" class="form-text text-muted"
+                   style="margin-left: 6%; display: list-item; list-style: initial">
+              {{ form.text.help_text|safe }}
+            </small>
+          {% endif %}
+          <input type="submit" class="btn btn-info mb-3 float-right" value="Отправить">
+        </div>
+      </form>
+    </div>
+  {% endif %}
+
+  <!-- Комментарии -->
+
+  {% for item in post.comments.all %}
+    {% if not item.reply_id %}
+      <div class="media card mt-5" id="comment_{{ item.id }}">
+        <div class="media-body card-body" style="width: 100%;">
+          <h5 class="mt-0 width-100">
+            <a href="{% url 'profile' item.author.username %}"
+               name="comment_{{ item.id }}">
+              @{{ item.author.username }}
+            </a>
+          </h5>
+          <p>{{ item.text | linebreaksbr }}</p>
+          <div id="reply-comment-{{ item.id }}" class="action-collapse text-muted d-inline-block" data-toggle="collapse" aria-expanded="true"
+               aria-controls="collapse-1"
+               href="#collapse-{{ item.id }}-form" style="cursor: pointer;">
+            <span>Ответить</span>
+          </div>
+          {% if item.replies.exists %}
+            <div id="check-all-replies-{{ item.id }}" class="action-collapse text-muted d-inline-block ml-3" data-toggle="collapse" aria-expanded="true"
+                 aria-controls="collapse-2"
+                 href="#collapse-{{ item.id }}-replies" style="cursor: pointer;">
+              <span>Просмотреть все ответы</span>
+            </div>
+          {% endif %}
+          <div class="d-inline-block float-right">
+            <small class="text-muted">
+              {{ item.created|date:"d E Y H:i" }}
+            </small>
+          </div>
+        </div>
+        <form method="post"
+              id="collapse-{{ item.id }}-form"
+              class="collapse ml-auto mr-auto" style="width: 95%;">
+          {% csrf_token %}
+          <div class="form-group">
+            {{ form.text|textarea:3|add_id:item.id|addclass:"form-control" }}
+            <input value="Отправить" type="button" onclick="add_reply('{{ post.author.username }}', {{ post.id }}, {{ item.id }})" class="btn-sm btn-primary mt-2 mb-1 float-right">
+          </div>
+        </form>
+      </div>
+    {% endif %}
+    <div id="collapse-{{ item.id }}-replies" class="collapse">
+      {% for reply in item.replies.all %}
+        <div class="media card mt-1 w-75 ml-auto">
+          <div class="media-body card-body" style="width: 100%;">
+            <h5 class="mt-0 width-100">
+              <a href="{% url 'profile' item.author.username %}"
+                 name="replay_{{ reply.id }}">
+                @{{ reply.author.username }}
+              </a>
+            </h5>
+            <p>{{ reply.text | linebreaksbr }}</p>
+            <div class="text-right">
+              <small class="text-muted">
+                {{ reply.created|date:"d E Y H:i" }}
+              </small>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% empty %}
+    <div class="text-center h5">
+      <p>Одинокий пост грустит без твоих комментариев ;(</p>
+    </div>
+
+  {% endfor %}
+</div>
+<script src="{% static 'js/create_comment.js' %}"></script>
+<script src="{% static 'js/add_reply_for_comment.js' %}"></script>

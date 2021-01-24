@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ edit_post|yesno:"Редактировать запись,Добавить запись" }}{% endblock title %}
+{% block content %}
+  {% load user_filters %}
+  <div class="row justify-content-center">
+    <div class="col-md-12 p-5">
+      <div class="card">
+        <div class="card-header">{{ edit_post|yesno:"Редактировать пост,Создайте свой пост :)" }}</div>
+        <div class="card-body">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+              <div class="form-group row">
+                <label for="{{ field.id_for_label }}" class="col-md-10 col-form-label text-md-left">
+                  {{ field.label }}{% if field.field.required %}<span class="required">*</span>{% endif %}
+                </label>
+                <div class="col-md-10">
+                  {{ field|addclass:"form-control" }}
+                  {% if field.help_text %}
+                    <small id="{{ field.id_for_label }}-help" class="form-text text-muted"
+                           style="margin-left: 6%; display: list-item; list-style: initial">
+                      {{ field.help_text|safe }}
+                    </small>
+                  {% endif %}
+                  {% if form.errors %}
+                    <div class="alert alert-danger" role="alert">
+                    {{ form.errors.image }}
+                    </div>
+                  {% endif %}
+
+                </div>
+              </div>
+            {% endfor %}
+            <div class="col-md-10 text-md-right">
+              <input class="btn btn-primary" type="submit"
+                     value="{{ edit_post|yesno:'Сохранить,Добавить' }}">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
