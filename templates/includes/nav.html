@@ -16,6 +16,7 @@
       <div class="dropdown d-inline">
         <button class="btn dropdown-toggle" type="button" data-toggle="dropdown"><img src="{% static 'images/settings.png' %}" alt="settings" style="width: 30px"></button>
         <div class="dropdown-menu" style="top: 35px; right: 0; left: auto;">
+          <a class="dropdown-item" href="{% url 'profile' request.user.username %}">Профиль</a>
           <a class="dropdown-item" href="{% url 'update-profile' %}">Изменить профиль</a>
           <a class="dropdown-item" href="{% url 'password_change' %}">Изменить пароль</a>
           <a class="dropdown-item" href="{% url 'logout' %}">Выйти</a>
