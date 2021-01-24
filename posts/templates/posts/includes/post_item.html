@@ -7,7 +7,7 @@
   <div class="card-body">
     <p class="d-inline-block card-text">
       <a href="{% url 'profile' post.author.username %}">
-        <strong class="d-block text-gray-dark">@{{ post.author }}</strong>
+        <strong class="d-block text-gray-dark">@{{ post.author.username }}</strong>
       </a>
       {{ post.text|linebreaksbr }}
     </p>

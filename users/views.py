@@ -13,7 +13,7 @@ class SignUp(CreateView):
 
 class ProfileUpdate(UpdateView):
     model = get_user_model()
-    fields = ('first_name', 'last_name', 'username', 'email')
+    fields = ('first_name', 'last_name', 'username')
     template_name = 'users/profile.html'
 
     def get_object(self, queryset=None):

@@ -41,7 +41,7 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-ROOT_URLCONF = 'yatube.urls'
+ROOT_URLCONF = '_project_.urls'
 
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
@@ -61,7 +61,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'yatube.wsgi.application'
+WSGI_APPLICATION = '_project_.wsgi.application'
 
 DATABASES = {
     'default': {
@@ -118,5 +118,7 @@ SITE_ID = 1
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+AUTH_USER_MODEL = 'users.User'
 
 
