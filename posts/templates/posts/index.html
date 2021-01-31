@@ -1,21 +1,11 @@
 {% extends "base.html" %}
-{% load cache %}
+{% load static %}
 {% block title %}Последние обновления на сайте{% endblock %}
 {% block header %}Последние обновления на сайте{% endblock %}
 {% block content %}
-  <div class="container">
-    {% include "posts/includes/menu.html" with index=True %}
-    {% for post in page %}
-      {% include "posts/includes/post_item.html" with post=post index=True %}
-      {% if not forloop.last %}
-        <hr>{% endif %}
-    {% endfor %}
-  </div>
-  {% if page.has_other_pages %}
-    <div class="container">
-      <div class="d-flex justify-content-center">
-        {% include "includes/paginator.html" with items=page paginator=paginator %}
-      </div>
-    </div>
-  {% endif %}
-{% endblock %} 
+  {% include "posts/includes/menu.html" %}
+  {% include "posts/includes/index_content.html" %}
+{% endblock %}
+{% block extra_js %}
+  <script src="{% static 'js/index_page_menu.js' %}"></script>
+{% endblock extra_js %}
