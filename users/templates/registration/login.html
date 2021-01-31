@@ -29,8 +29,7 @@
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ next }}">
             <div class="form-group row">
-              <label for="{{ form.username.id_for_label }}" class="col-md-4 col-form-label text-md-right">Имя
-                пользователя</label>
+              <label for="{{ form.username.id_for_label }}" class="col-md-4 col-form-label text-md-right">E-mail</label>
               <div class="col-md-6">
                 {{ form.username|addclass:"form-control" }}
               </div>

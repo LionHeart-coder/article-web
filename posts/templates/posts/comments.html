@@ -46,6 +46,7 @@
               <div style="font-size: .8rem; color: #4776fc">@{{ item.author.username }}</div>
             </a>
           </div>
+          <hr style="width: 95%;">
           <p style="margin-left: 60px;">{{ item.text | linebreaksbr }}</p>
           <div id="reply-comment-{{ item.id }}" class="action-collapse text-muted d-inline-block"
                data-toggle="collapse" aria-expanded="true"
@@ -90,7 +91,8 @@
                   <img src="{{ im.url }}" alt="" style="border-radius: 15%">
                 {% endthumbnail %}
               {% else %}
-                <img src="{% static 'images/users/profile-default.jpg' %}" alt="" width="50" style="border-radius: 15%">
+                <img src="{% static 'images/users/profile-default.jpg' %}" alt="" width="50"
+                     style="border-radius: 15%">
               {% endif %}
               <a class="profile-link"
                  href="{% url 'profile' reply.author.username %}"
@@ -100,6 +102,7 @@
                 <div style="font-size: .8rem; color: #4776fc">@{{ reply.author.username }}</div>
               </a>
             </div>
+            <hr style="width: 95%;">
             <p style="margin-left: 60px">{{ reply.text | linebreaksbr }}</p>
             <div class="text-right">
               <small class="text-muted">
@@ -117,5 +120,7 @@
 
   {% endfor %}
 </div>
-<script src="{% static 'js/create_comment.js' %}"></script>
-<script src="{% static 'js/add_reply_for_comment.js' %}"></script>
+{% block extra_js %}
+  <script src="{% static 'js/create_comment.js' %}"></script>
+  <script src="{% static 'js/add_reply_for_comment.js' %}"></script>
+{% endblock extra_js %}

@@ -4,8 +4,8 @@ from django.contrib import admin
 from django.contrib.flatpages import views
 from django.urls import include, path
 
-handler404 = 'posts.views.page_not_found'  # noqa
-handler500 = 'posts.views.server_error'  # noqa
+handler404 = 'posts.views.base_view.page_not_found'  # noqa
+handler500 = 'posts.views.base_view.server_error'  # noqa
 
 urlpatterns = [
     path('about-author/', views.flatpage, {'url': '/about-author/'}, name='about_author'),

@@ -1,0 +1,15 @@
+<div id="index-content">
+  {% for post in page %}
+    {% include "posts/includes/post_item.html" with post=post %}
+    {% if not forloop.last %}
+      <hr>{% endif %}
+  {% endfor %}
+
+  {% if page.has_other_pages %}
+    <div class="container">
+      <div class="d-flex justify-content-center">
+        {% include "includes/paginator.html" with items=page paginator=paginator %}
+      </div>
+    </div>
+  {% endif %}
+</div>
