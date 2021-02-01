@@ -1,0 +1,23 @@
+{% load static %}
+{% load thumbnail %}
+<div id="best-author-list">
+  {% for author in author_list %}
+  <div class="col-lg-4 col-md-6 col-sm-12 mb-2">
+    <div class="card" style="width: 16rem;">
+      {% if author.avatar %}
+        {% thumbnail author.avatar "254x254" crop="center" as im %}
+          <img class="card-img-top" src="{{ im.url }}" alt="Card image">
+        {% endthumbnail  %}
+      {% else %}
+        <img class="card-img-top" src="{% static 'images/users/profile-default.jpg' %}" alt="Card image">
+      {% endif %}
+      <div class="card-body text-center">
+        <h5 class="card-title">{{ author.get_full_name }}</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+          content.</p>
+        <a href="{% url 'profile' author.username %}" class="btn btn-light">Читать статьи</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
