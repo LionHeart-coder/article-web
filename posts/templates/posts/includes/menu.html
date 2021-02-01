@@ -1,4 +1,4 @@
-{% if user.is_authenticated %}
+
   <div id="index-menu" class="row">
     <ul class="nav nav-tabs">
       <li class="nav-item">
@@ -10,9 +10,10 @@
       <li class="nav-item">
         <a id="best-authors" class="nav-link" href="#">Популярные авторы</a>
       </li>
-      <li class="nav-item">
-        <a id="favorites-authors" class="nav-link" href="#" data-username="{{ request.user.username }}">Моя лента</a>
-      </li>
+      {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a id="favorites-authors" class="nav-link" href="#" data-username="{{ request.user.username }}">Моя лента</a>
+        </li>
+      {% endif %}
     </ul>
   </div>
-{% endif %} 

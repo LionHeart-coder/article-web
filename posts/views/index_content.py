@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Count
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render, render_to_response
 
@@ -26,7 +27,7 @@ def index(request):
 
 def best_articles(request):
     post_list = (
-        Post.objects.all()[:2]
+        Post.objects.annotate(rating=Count('likes') + Count('comments')).order_by('-rating')[:5]
             .select_related('group', 'author')
             .prefetch_related('comments', 'likes')
             .annotate_like(request.user)
@@ -37,7 +38,7 @@ def best_articles(request):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     context = {
-        'page': page, 'paginator': paginator
+        'page': page, 'paginator': paginator, 'request': request,
     }
     return render_to_response("posts/includes/index_content.html", context)
 
