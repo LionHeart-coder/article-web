@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{% block title %}The Last Social Media You'll Ever Need{% endblock %} | Yatube</title>
+    <title>{% block title %}The Last Social Media You'll Ever Need{% endblock %} | WebArticles</title>
     <!-- Загрузка статики -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
@@ -15,9 +15,9 @@
 
   <body>
     {% include 'includes/nav.html' %}
-    <main>
+    <main style="min-height:80vh">
       <div class="container">
-        <h1>{% block header %}{% endblock header %}</h1>
+        <h1 id="main-header">{% block header %}{% endblock header %}</h1>
         {% block content %}{% endblock content %}
       </div>
     </main>
