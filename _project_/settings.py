@@ -4,7 +4,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = 'poasv*+^b^3_0!*9r&%2fb6(dew446*@ly=144%gu$ct3h_j1#'
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '*'
@@ -27,6 +27,8 @@ INSTALLED_APPS = [
     # 3-d party apps
     'sorl.thumbnail',
     'debug_toolbar',
+    'ckeditor',
+    'ckeditor_uploader',
     'django_cleanup.apps.CleanupConfig',
 ]
 
@@ -64,10 +66,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = '_project_.wsgi.application'
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'article_db',
+        'USER': 'article-user',
+        'PASSWORD': 'articlepswd',
+        'HOST': 'postgres-article',
+        'PORT': 5432
+
     }
 }
 
@@ -116,10 +130,14 @@ EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 
 SITE_ID = 1
 
-INTERNAL_IPS = [
-    '127.0.0.1',
-]
+# INTERNAL_IPS = [
+#     '127.0.0.1',
+# ]
 
 AUTH_USER_MODEL = 'users.User'
+
+# ckeditor
+
+CKEDITOR_UPLOAD_PATH = "articles-img/"
 
 
