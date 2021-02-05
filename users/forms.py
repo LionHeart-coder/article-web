@@ -18,6 +18,7 @@ class CreationForm(forms.ModelForm):
             'username',
             'email',
             'avatar',
+            'about_author',
             'password1',
             'password2',
         )
@@ -40,4 +41,4 @@ class CreationForm(forms.ModelForm):
 class UserChangeForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username', 'email', 'avatar')
+        fields = ('first_name', 'last_name', 'username', 'email', 'about_author', 'avatar')

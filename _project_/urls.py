@@ -14,6 +14,7 @@ urlpatterns = [
     path('auth/', include('django.contrib.auth.urls')),
     path('admin-page/', admin.site.urls),
     path('auth/', include('users.urls')),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
     path('', include('posts.urls')),
 ]
 

@@ -16,6 +16,7 @@ class User(AbstractBaseUser, PermissionsMixin):
                                null=True,
                                blank=True,
                                )
+    about_author = models.TextField(verbose_name='О себе', max_length=700)
 
     date_joined = models.DateTimeField('Дата регистрации', auto_now_add=True)
     is_active = models.BooleanField('Аккаунт активирован', default=False)

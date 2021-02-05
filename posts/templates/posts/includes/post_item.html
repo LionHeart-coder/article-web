@@ -1,10 +1,23 @@
 {% load static %}
 {% load thumbnail %}
 
-<div class="card mb-3 mt-1 shadow-sm" id="post_{{ post.id }}">
-  {% thumbnail post.image "960x339" crop="center" as im %}
-    <img alt="" class="card-img" src="{{ im.url }}"/>
-  {% endthumbnail %}
+<div class="card mb-3 mt-4 shadow-sm" id="post_{{ post.id }}">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="img-wrap w-100">
+        {% thumbnail post.preview_image "960x339" crop="center" as im %}
+          <img alt="" class="card-img" src="{{ im.url }}" style="filter: blur(5px);"/>
+        {% endthumbnail %}
+        <div>
+            <p class="text-white text-center mr-2 ml-2" style="font-size: 3.5vh">{{ post.title }}</p>
+            <a href="{% url 'post' post.author.username post.id %}" class="btn btn-light">
+              <img class="mr-2" style="margin-bottom: 3px" src="{% static 'images/book-icon.png' %}" alt="" width="16">Читать
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
   <div class="card-body">
     <div class="d-flex" style="border: black 2px;">
       {% if post.author.avatar %}
@@ -12,7 +25,7 @@
           <img alt="" src="{{ im.url }}" style="border-radius: 15%"/>
         {% endthumbnail %}
       {% else %}
-        <img src="{% static 'images/users/profile-default.jpg' %}" alt="" width="50" style="border-radius: 15%">
+        <img src="{% static 'images/profile-default.jpg' %}" alt="" width="50" style="border-radius: 15%">
       {% endif %}
       <a class="profile-link"
          href="{% url 'profile' post.author.username %}">
@@ -22,8 +35,9 @@
       </a>
     </div>
     <p class="card-text mt-3 ml-3">
-      {{ post.text|linebreaksbr }}
+      {{ post.preview_text|linebreaksbr }}
     </p>
+    <hr>
 
     {% if post.group %}
       <br>
@@ -32,7 +46,7 @@
       </a>
     {% endif %}
 
-    <div class="d-flex justify-content-between align-items-center">
+    <div class="d-flex justify-content-between align-items-center mt-3 mb-3">
       <div class="btn-toolbar">
         {% if request.user == post.author %}
           <a class="btn btn-sm btn-info text-white" onclick="manageWindow({{ post.id }})" role="button">
@@ -41,7 +55,7 @@
         {% endif %}
       </div>
     </div>
-    <hr>
+
     {% include "posts/includes/likes.html" %}
     <div class="float-right mt-1">
       <small class="text-muted">{{ post.pub_date|date:"d E Y H:i" }}</small>
