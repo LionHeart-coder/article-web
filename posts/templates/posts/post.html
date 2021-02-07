@@ -1,7 +1,60 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load thumbnail %}
 {% block title %}Страница поста{% endblock title %}
 {% block content %}
-  {% include 'posts/includes/post_item.html' with post=post author=post.author %}
-  {% include 'posts/comments.html' with post=post comments=post.comments.all %}
+  <div class="mt-5">
+    <h1><strong>{{ post.title }}</strong></h1>
+    <a class="author-link-post text-decoration-none"
+       href="{% url 'profile' post.author.username %}">Автор: {{ post.author.get_full_name }}</a>
+  </div>
+  <hr>
+  <div id="article-content">
+    {{ post.content|safe }}
+    <div class="d-flex">
+      {% include 'posts/includes/likes.html' %}
+    </div>
+  </div>
+  <hr>
+  <div style="min-height: 100px">
+    <div class="d-flex">
+      <div>
+        {% if post.author.avatar %}
+          {% thumbnail post.author.avatar "50x50" crop="center" as im %}
+            <img alt="" src="{{ im.url }}" style="border-radius: 15%"/>
+          {% endthumbnail %}
+        {% else %}
+          <img src="{% static 'images/profile-default.jpg' %}" alt="" width="50" style="border-radius: 15%">
+        {% endif %}
+      </div>
+      <div class="ml-3">
+        <a class="text-decoration-none" href="{% url 'profile' post.author.username %}">
+          {{ post.author.get_full_name }}
+          <br>
+          <div style="font-size: 13px">@{{ post.author.username }}</div>
+        </a>
+      </div>
+    </div>
+    <div class="mt-3 text-muted w-75" style="font-size: 14px">
+      {{ post.author.about_author }}
+    </div>
+    {% if post.author.social_links.all %}
+      <p class="mt-3">Мои социальные сети:</p>
+      <div id="social-links-author-post" class="d-flex flex-wrap mt-1">
+      {% for link in post.author.social_links.all %}
+        <a href="{{ link.link }}" class="flex-column text-center ml-3">
+          <img id="social-link-img" src="" width="23" alt="">
+          <p style="font-size: 14px">{{ link.link_type }}</p>
+        </a>
+      {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="mt-4">
+    {% include 'posts/comments.html' with post=post comments=post.comments.all %}
+  </div>
 {% endblock content %}
+{% block extra_js %}
+  <script src="{% static 'js/add_social_img.js' %}"></script>
+{% endblock extra_js %}

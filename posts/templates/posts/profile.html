@@ -1,17 +1,28 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load user_filters %}
+{% load thumbnail %}
 {% block title %}Профиль{% endblock title %}
 {% block content %}
   <div class="row">
     <div class="col-md-3 mb-3 mt-1">
       <div class="card">
-        <div class="card-body">
+        <div class="card-body text-center">
+          <div class="card-img">
+          {% if author.avatar %}
+            {% thumbnail author.avatar "150x150" crop="center" as im %}
+              <img alt="" src="{{ im.url }}" style="border-radius: 5%"/>
+            {% endthumbnail %}
+          {% else %}
+            <img alt="" src="{% static 'images/profile-default.jpg' %}" width="150" style="border-radius: 5%"/>
+          {% endif %}
+          </div>
           <div class="h2">
             <!-- Имя автора -->
             {{ author.get_full_name }}
           </div>
-          <div class="h3 text-muted">
+
+          <div class="h5 text-muted">
             <!-- username автора -->
             @{{ author.username }}
           </div>
@@ -80,5 +91,7 @@
   </div>
   {% include 'posts/includes/social-link-form-popup.html' %}
   {% include 'posts/includes/social-link-edit-popup.html' %}
-  <script src="{% static 'js/add_social_link.js' %}"></script>
 {% endblock content %}
+{% block extra_js %}
+  <script src="{% static 'js/add_social_link.js' %}"></script>
+{% endblock extra_js %}

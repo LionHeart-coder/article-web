@@ -2,7 +2,7 @@
 <div id="post-like-{{ post.id }}" class="d-flex row ml-1 mt-1 mb-0 float-left justify-content-between"
      style="width: 120px;">
   <button id="ajax_{{ post.id }}" onclick="addLike({{ post.id }})" data-catusername="{{ post.author.username }}"
-          data-cat-is-authenticated="{{ user.is_authenticated }}" class="post-like">
+          data-cat-is-authenticated="{{ request.user.is_authenticated }}" class="post-like">
     {% if post.liked %}
       <img id="like-img-{{ post.id }}" src="{% static 'images/like-active.png' %}" alt="" style="width: 30px">
     {% else %}

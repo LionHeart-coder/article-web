@@ -1,18 +1,30 @@
 {% load static %}
 <div id="social-link-list" class="container w-100">
   {% for link in author.social_links.all %}
-    <div id="social-link-{{ link.pk }}" class="col-6 text-center" style="font-size: 15px">
-      <a href="{{ link.link }}"><img alt="" src="" style="width: 25px;"><br>{{ link.link_type }}</a>
+    <div id="social-link-{{ link.pk }}" class="col-6 text-center" style="font-size: 15px;">
+      <a href="{{ link.link }}">
+        <img id="social-link-img" alt="" src="" style="width: 25px;">
+        <br>
+        {{ link.link_type }}
+      </a>
     </div>
     {% if forloop.last and request.user == author %}
       <div id="social-link-popup-add" class="col-6 text-center" style="font-size: 15px">
-        <a href="#"><img alt="" src="" style="width: 25px;"><br>добавить</a>
+        <a href="#">
+          <img id="social-link-img-add" alt="" src="" style="width: 25px;">
+          <br>
+          добавить
+        </a>
       </div>
     {% endif %}
   {% empty %}
     {% if request.user == author %}
       <div id="social-link-popup-add" class="col-6 text-center" style="font-size: 15px">
-        <a href="#"><img alt="" src="" style="width: 25px;"><br>добавить</a>
+        <a href="#">
+          <img id="social-link-img-add" alt="" src="" style="width: 25px;">
+          <br>
+          добавить
+        </a>
       </div>
     {% endif %}
   {% endfor %}

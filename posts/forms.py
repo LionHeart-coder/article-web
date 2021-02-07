@@ -1,12 +1,15 @@
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django import forms
 
 from .models import Comment, Post, SocialLink
 
 
 class PostForm(forms.ModelForm):
+
     class Meta:
         model = Post
-        fields = ('text', 'group', 'image')
+        fields = ('title', 'preview_text', 'content', 'group', 'preview_image')
+        widgets = {'content': CKEditorUploadingWidget()}
 
 
 class CommentForm(forms.ModelForm):

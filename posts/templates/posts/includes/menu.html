@@ -1,12 +1,18 @@
-{% if user.is_authenticated %}
-  <div class="row">
-    <ul class="nav nav-tabs">
+<div id="index-menu" class="row">
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a id="all-content" class="nav-link active" href="#">Все публикации</a>
+    </li>
+    <li class="nav-item">
+      <a id="best-articles" class="nav-link" href="#">Выбор редакции</a>
+    </li>
+    <li class="nav-item">
+      <a id="best-authors" class="nav-link" href="#">Популярные авторы</a>
+    </li>
+    {% if user.is_authenticated %}
       <li class="nav-item">
-        <a class="nav-link {% if index %}active{% endif %}" href="{% url 'index' %}">Все авторы</a>
+        <a id="favorites-authors" class="nav-link" href="#" data-username="{{ request.user.username }}">Моя лента</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link {% if follow %}active{% endif %}" href="{% url 'follow_index' %}">Избранные авторы</a>
-      </li>
-    </ul>
-  </div>
-{% endif %} 
+    {% endif %}
+  </ul>
+</div>

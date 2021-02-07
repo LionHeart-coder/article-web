@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Exists, OuterRef
+from ckeditor_uploader.fields import RichTextUploadingField
 
 User = get_user_model()
 
@@ -15,9 +16,9 @@ class PostQuerySet(models.QuerySet):
 
 
 class Post(models.Model):
-    text = models.TextField(
-        verbose_name='Текст', help_text='Не пишите слишком длинные посты :)',
-    )
+    title = models.CharField(verbose_name='Заголовок', max_length=80)
+    preview_text = models.TextField(verbose_name='Описание поста', max_length=500)
+    content = RichTextUploadingField()
     pub_date = models.DateTimeField('date published', auto_now_add=True,)
 
     author = models.ForeignKey(
@@ -32,11 +33,9 @@ class Post(models.Model):
         verbose_name='Группа',
         help_text='Группа к которой привязывается пост',
     )
-    image = models.ImageField(
-        verbose_name='Картинка',
-        upload_to='posts/',
-        blank=True,
-        null=True,
+    preview_image = models.ImageField(
+        verbose_name='Картинка для предпросмотра',
+        upload_to='posts/preview/',
         help_text='Картинка к посту',
     )
 

@@ -1,6 +1,7 @@
 {% load static %}
 {% load user_filters %}
 {% load post_filters %}
+{% load thumbnail %}
 <div id="comments">
   {% if user.is_authenticated %}
     <div class="card my-4">
@@ -29,20 +30,33 @@
     {% if not item.reply_id %}
       <div class="media card mt-5" id="comment_{{ item.id }}">
         <div class="media-body card-body" style="width: 100%;">
-          <h5 class="mt-0 width-100">
-            <a href="{% url 'profile' item.author.username %}"
+          <div class="d-flex" style="vertical-align: center;">
+            {% if item.author.avatar %}
+              {% thumbnail item.author.avatar "50x50" crop="center" as im %}
+                <img src="{{ im.url }}" alt="" style="border-radius: 15%">
+              {% endthumbnail %}
+            {% else %}
+              <img src="{% static 'images/users/profile-default.jpg' %}" alt="" width="50" style="border-radius: 15%">
+            {% endif %}
+            <a class="profile-link"
+               href="{% url 'profile' item.author.username %}"
                name="comment_{{ item.id }}">
-              @{{ item.author.username }}
+              {{ item.author.get_full_name }}
+              <br>
+              <div style="font-size: .8rem; color: #4776fc">@{{ item.author.username }}</div>
             </a>
-          </h5>
-          <p>{{ item.text | linebreaksbr }}</p>
-          <div id="reply-comment-{{ item.id }}" class="action-collapse text-muted d-inline-block" data-toggle="collapse" aria-expanded="true"
+          </div>
+          <hr style="width: 95%;">
+          <p style="margin-left: 60px;">{{ item.text | linebreaksbr }}</p>
+          <div id="reply-comment-{{ item.id }}" class="action-collapse text-muted d-inline-block"
+               data-toggle="collapse" aria-expanded="true"
                aria-controls="collapse-1"
                href="#collapse-{{ item.id }}-form" style="cursor: pointer;">
             <span>Ответить</span>
           </div>
           {% if item.replies.exists %}
-            <div id="check-all-replies-{{ item.id }}" class="action-collapse text-muted d-inline-block ml-3" data-toggle="collapse" aria-expanded="true"
+            <div id="check-all-replies-{{ item.id }}" class="action-collapse text-muted d-inline-block ml-3"
+                 data-toggle="collapse" aria-expanded="true"
                  aria-controls="collapse-2"
                  href="#collapse-{{ item.id }}-replies" style="cursor: pointer;">
               <span>Просмотреть все ответы</span>
@@ -60,7 +74,9 @@
           {% csrf_token %}
           <div class="form-group">
             {{ form.text|textarea:3|add_id:item.id|addclass:"form-control" }}
-            <input value="Отправить" type="button" onclick="add_reply('{{ post.author.username }}', {{ post.id }}, {{ item.id }})" class="btn-sm btn-primary mt-2 mb-1 float-right">
+            <input value="Отправить" type="button"
+                   onclick="add_reply('{{ post.author.username }}', {{ post.id }}, {{ item.id }})"
+                   class="btn-sm btn-primary mt-2 mb-1 float-right">
           </div>
         </form>
       </div>
@@ -69,13 +85,25 @@
       {% for reply in item.replies.all %}
         <div class="media card mt-1 w-75 ml-auto">
           <div class="media-body card-body" style="width: 100%;">
-            <h5 class="mt-0 width-100">
-              <a href="{% url 'profile' item.author.username %}"
-                 name="replay_{{ reply.id }}">
-                @{{ reply.author.username }}
+            <div class="d-flex" style="vertical-align: center;">
+              {% if reply.author.avatar %}
+                {% thumbnail reply.author.avatar "50x50" crop="center" as im %}
+                  <img src="{{ im.url }}" alt="" style="border-radius: 15%">
+                {% endthumbnail %}
+              {% else %}
+                <img src="{% static 'images/users/profile-default.jpg' %}" alt="" width="50"
+                     style="border-radius: 15%">
+              {% endif %}
+              <a class="profile-link"
+                 href="{% url 'profile' reply.author.username %}"
+                 name="reply_{{ reply.id }}">
+                {{ reply.author.get_full_name }}
+                <br>
+                <div style="font-size: .8rem; color: #4776fc">@{{ reply.author.username }}</div>
               </a>
-            </h5>
-            <p>{{ reply.text | linebreaksbr }}</p>
+            </div>
+            <hr style="width: 95%;">
+            <p style="margin-left: 60px">{{ reply.text | linebreaksbr }}</p>
             <div class="text-right">
               <small class="text-muted">
                 {{ reply.created|date:"d E Y H:i" }}
@@ -92,5 +120,7 @@
 
   {% endfor %}
 </div>
-<script src="{% static 'js/create_comment.js' %}"></script>
-<script src="{% static 'js/add_reply_for_comment.js' %}"></script>
+{% block extra_js %}
+  <script src="{% static 'js/create_comment.js' %}"></script>
+  <script src="{% static 'js/add_reply_for_comment.js' %}"></script>
+{% endblock extra_js %}
