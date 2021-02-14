@@ -29,6 +29,8 @@ RUN         chown -R ${USER}:${USER} /home/articleweb/app
 
 WORKDIR     ${PROJECTPATH}
 
+USER        ${USER}
+
 
 FROM        python:3.7 as production
 ENV         LANG C.UTF-8
