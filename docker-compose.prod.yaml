@@ -18,7 +18,7 @@ services:
   article-app:
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
       target: devstage
     container_name: article-app
     environment:
