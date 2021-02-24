@@ -1,16 +1,32 @@
-from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, UpdateView
+from datetime import datetime
+
+from django.contrib.auth import get_user_model, login
+from django.contrib.auth.tokens import default_token_generator
+from django.http import HttpResponseBadRequest, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+from django.views.generic import CreateView, UpdateView, TemplateView
+
 from users.forms import CreationForm, UserChangeForm
+from users.utils import send_registration_mail
 
 User = get_user_model()
 
 
 class SignUp(CreateView):
     form_class = CreationForm
-    success_url = reverse_lazy('login')
     template_name = 'users/signup.html'
+
+    def get_success_url(self):
+        return reverse('create-done', kwargs={'email': self.object.email})
+
+
+class CreateDone(TemplateView):
+    template_name = 'users/create_account_done.html'
+
+
+class ActivationDone(TemplateView):
+    template_name = 'users/activation_account_done.html'
 
 
 class ProfileUpdate(UpdateView):
@@ -25,4 +41,45 @@ class ProfileUpdate(UpdateView):
         return reverse('profile', kwargs={'username': username})
 
 
+def create_done(request, email):
+    if request.user.is_authenticated:
+        return redirect('profile', username=request.user.username)
+    user = get_object_or_404(User, email=email)
+    time_to_resend = user.email_timestamp - int(datetime.now().timestamp())
 
+    if time_to_resend <= 0:
+        time_to_resend = 0
+    context = {'email': user.email, 'time_to_resend': time_to_resend}
+    return render(
+        request,
+        'users/create_account_done.html',
+        context=context,
+    )
+
+
+# TODO переписать под View класс с методами get и post
+def check_user_token(request):
+    token = request.GET.get('token')
+    email = request.GET.get('email')
+    user = get_object_or_404(User, email=email)
+    if token is None:
+        return HttpResponseBadRequest()
+    if user.is_active:
+        return HttpResponseBadRequest()
+    if not default_token_generator.check_token(user, token):
+        return HttpResponseBadRequest()
+    user.is_active = True
+    user.save()
+    login(request, user)
+    return redirect('activate-done')
+
+
+def resending_email(request, email):
+    user = get_object_or_404(User, email=email)
+    if user.is_active:
+        return redirect('profile', username=user.username)
+    if user.email_timestamp - int(datetime.now().timestamp()) < 0:
+        token = default_token_generator.make_token(user)
+        send_registration_mail(user, token, email)
+        user.update_email_timestamp()
+    return JsonResponse({'status': 'success'})

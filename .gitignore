@@ -23,3 +23,7 @@ db.sqlite3
 
 sent_emails/
 dev_tools/
+
+Dockerfile
+docker-compose.yaml
+.env

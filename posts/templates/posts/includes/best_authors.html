@@ -9,7 +9,7 @@
             <img class="card-img-top" src="{{ im.url }}" alt="Card image">
           {% endthumbnail  %}
         {% else %}
-          <img class="card-img-top" src="{% static 'images/users/profile-default.jpg' %}" alt="Card image">
+          <img class="card-img-top" src="{% static 'images/profile-default.jpg' %}" alt="Card image">
         {% endif %}
         <div class="card-body text-center">
           <h5 class="card-title">{{ author.get_full_name }}</h5>

@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>TEXT</title>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .email-text {
+            text-align: center;
+            font-size: 20px;
+            color: #5D5D68;
+
+        }
+
+        .email-table {
+            margin-top: 2%;
+            margin-right: auto;
+            width: 600px;
+            border-spacing: 50px;
+        }
+
+        .email-table h1 {
+            color: #585863;
+        }
+
+        .email-button {
+            background-color: #616868;
+            color: #ffffff;
+            padding: 14px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 6px;
+        }
+
+        .email-button:hover {
+            background-color: #777b7b;
+        }
+
+        .red-text {
+            color: red;
+        }
+
+        li a[href] {
+            color: white;
+        }
+
+        td a[href] {
+            color: white;
+        }
+
+    </style>
+  </head>
+  <body>
+    <table class="email-table">
+      <thead>
+      <tr>
+        <th><h1>Письмо активации Web-Article</h1></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="email-text">
+        <td><h2><span class="red-text">Web</span>article</h2></td>
+      </tr>
+      <tr class="email-text">
+        <td>Активируйте учётную запись и пользуйтесь всеми возможностями сайта!</td>
+      </tr>
+      <tr class="email-text">
+        <td><a href="{{ url }}" class="email-button">Активировать аккаунт</a></td>
+      </tr>
+      <tr>
+        <td>
+          <hr/>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </body>
+</html>

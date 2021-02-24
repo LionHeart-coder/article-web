@@ -45,7 +45,7 @@ class Post(models.Model):
         ordering = ('-pub_date',)
 
     def __str__(self):
-        return self.text[:15]
+        return self.title
 
 
 class Group(models.Model):
@@ -85,6 +85,9 @@ class Comment(models.Model):
     class Meta:
         ordering = ('-created',)
 
+    def __str__(self):
+        return self.author
+
 
 class Follow(models.Model):
     user = models.ForeignKey(
@@ -97,6 +100,9 @@ class Follow(models.Model):
     class Meta:
         unique_together = ('user', 'author')
 
+    def __str__(self):
+        return f'{self.user} follow {self.author}'
+
 
 class Like(models.Model):
     user = models.ForeignKey(User, related_name='likes', on_delete=models.CASCADE)
@@ -104,6 +110,9 @@ class Like(models.Model):
 
     class Meta:
         unique_together = ('user', 'post')
+
+    def __str__(self):
+        return f'{self.user} liked {self.post}'
 
 
 class SocialLink(models.Model):
@@ -120,3 +129,6 @@ class SocialLink(models.Model):
 
     class Meta:
         unique_together = ('user', 'link_type')
+
+    def __str__(self):
+        return self.user
