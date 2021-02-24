@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Регистрация успешно завершена{% endblock %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-8 p-5">
+      <div class="card">
+        <div class="card-header">Регистрация успешно завершена</div>
+        <div class="card-body text-center">
+          <p>Учётная запись создана.
+             <br>
+             Теперь вы можете пользоваться всеми возможностями сайта :)
+          </p>
+          <img src="{% static 'images/success-registration.gif' %}" alt="" width="300">
+          <br>
+          <a class="btn btn-success" href="{% url 'index' %}">На главную</a>
+        </div> <!-- card body -->
+      </div> <!-- card -->
+    </div> <!-- col -->
+  </div> <!-- row -->
+
+{% endblock %} 

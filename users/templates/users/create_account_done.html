@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Подтверждение почты{% endblock %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-md-8 p-5">
+      <div class="card">
+        <div class="card-header">Подтверждение почты</div>
+        <div class="card-body text-center">
+          <p>Осталось подтвердить вашу почту.
+            <br>
+            Мы стараемся защитить сайт от нашествия ботов :)
+          </p>
+          <img src="{% static 'images/success-send-mail.gif' %}" alt="" width="300">
+          <br>
+          <div class="d-inline">Повторная отправка через:</div>
+          <div class="d-inline" id="timer" data-time="{{ time_to_resend }}">{{ time_to_resend }}</div>
+          <span class="mr-2">seconds</span>
+          <a id="send-button" class="btn btn-success disabled" data-email="{{ email }}" href="#">Отправить</a>
+        </div> <!-- card body -->
+      </div> <!-- card -->
+    </div> <!-- col -->
+  </div> <!-- row -->
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/send_email.js' %}"></script>
+{% endblock extra_js %}

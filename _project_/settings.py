@@ -1,10 +1,12 @@
 import os
+from dotenv import load_dotenv
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
-SECRET_KEY = 'poasv*+^b^3_0!*9r&%2fb6(dew446*@ly=144%gu$ct3h_j1#'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     '*'
@@ -66,24 +68,25 @@ TEMPLATES = [
 
 WSGI_APPLICATION = '_project_.wsgi.application'
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'article_db',
-        'USER': 'article-user',
-        'PASSWORD': 'articlepswd',
-        'HOST': 'postgres-article',
-        'PORT': 5432
-
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.getenv("DB_NAME"),
+            'USER': os.getenv("DB_USER"),
+            'PASSWORD': os.getenv("DB_PASSWORD"),
+            'HOST': os.getenv("DB_HOST"),
+            'PORT': 5432
+
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -125,14 +128,22 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'index'
 
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+if DEBUG:
+    IS_SECURE = False
+    CURRENT_DOMAIN = '127.0.0.1:8000'
+else:
+    IS_SECURE = True
+    CURRENT_DOMAIN = 'web-article.ru'
 
 SITE_ID = 1
-
-# INTERNAL_IPS = [
-#     '127.0.0.1',
-# ]
 
 AUTH_USER_MODEL = 'users.User'
 

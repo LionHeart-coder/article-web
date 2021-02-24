@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.core.mail import send_mail
@@ -19,6 +21,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     about_author = models.TextField(verbose_name='О себе', max_length=700)
 
     date_joined = models.DateTimeField('Дата регистрации', auto_now_add=True)
+
+    email_timestamp = models.IntegerField('Переотправление письма', default=0, help_text='Время до повторной отправки письма')
+
     is_active = models.BooleanField('Аккаунт активирован', default=False)
     is_staff = models.BooleanField('Админ', default=False)
 
@@ -39,6 +44,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     def email_user(self, subject, message, from_email=None, **kwargs):
         """ For sending email to user """
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+    def update_email_timestamp(self):
+        self.email_timestamp = int(datetime.now().timestamp() + 60)
+        # TODO оптимизировать сохранение
+        self.save()
 
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"
