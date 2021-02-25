@@ -3,6 +3,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.flatpages import views
 from django.urls import include, path
+from django.contrib.auth.decorators import login_required
+from ckeditor_uploader.views import upload
 
 handler404 = 'posts.views.base_view.page_not_found'  # noqa
 handler500 = 'posts.views.base_view.server_error'  # noqa
@@ -14,8 +16,12 @@ urlpatterns = [
     path('auth/', include('django.contrib.auth.urls')),
     path('admin-page/', admin.site.urls),
     path('auth/', include('users.urls')),
-    path('ckeditor/', include('ckeditor_uploader.urls')),
     path('', include('posts.urls')),
+]
+
+urlpatterns += [
+    path('ckeditor/upload/', login_required(upload), name='ckeditor_upload'),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 
 if settings.DEBUG:
