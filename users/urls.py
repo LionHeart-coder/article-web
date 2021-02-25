@@ -6,8 +6,8 @@ from users.views import (ActivationDone, ProfileUpdate, SignUp,
 urlpatterns = [
     path('signup/', SignUp.as_view(), name='signup'),
     path('update-profile/', ProfileUpdate.as_view(), name='update-profile'),
-    path('create-done/<email>/', create_done, name='create-done'),
+    path('create-done/<email>/<token>/', create_done, name='create-done'),
     path('check-user-token/', check_user_token, name='heck-user-token'),
     path('registration-done/', ActivationDone.as_view(), name='activate-done'),
-    path('resending-email/<email>/', resending_email, name='resending-email'),
+    path('resending-email/<email>/<token>/', resending_email, name='resending-email'),
 ]

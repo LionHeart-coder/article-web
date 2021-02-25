@@ -1,12 +1,12 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import default_token_generator
 
-from users.utils import create_user_token, send_registration_mail
+from users.utils import send_registration_mail
 
 User = get_user_model()
 
 
 def create_registration_email(sender, instance, created=False, **kwargs):
-    print("Created:", created)
-    if created:
-        token = create_user_token(instance)
+    if created and not instance.is_superuser:
+        token = default_token_generator.make_token(instance)
         send_registration_mail(instance, token, instance.email)
