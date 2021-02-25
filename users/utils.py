@@ -3,11 +3,6 @@ from django.contrib.auth.tokens import default_token_generator
 from django.template.loader import render_to_string
 
 
-def create_user_token(current_user):
-    token = default_token_generator.make_token(current_user)
-    return token
-
-
 def send_registration_mail(recipient, token, email):
     current_domain = settings.CURRENT_DOMAIN
     protocol = "https" if settings.IS_SECURE else "http"

@@ -18,7 +18,9 @@ class SignUp(CreateView):
     template_name = 'users/signup.html'
 
     def get_success_url(self):
-        return reverse('create-done', kwargs={'email': self.object.email})
+        email = self.object.email
+        token = default_token_generator.make_token(self.object)
+        return reverse('create-done', kwargs={'email': email, 'token': token})
 
 
 class CreateDone(TemplateView):
@@ -41,15 +43,17 @@ class ProfileUpdate(UpdateView):
         return reverse('profile', kwargs={'username': username})
 
 
-def create_done(request, email):
+def create_done(request, email, token):
     if request.user.is_authenticated:
         return redirect('profile', username=request.user.username)
     user = get_object_or_404(User, email=email)
+    if not default_token_generator.check_token(user, token):
+        return HttpResponseBadRequest()
     time_to_resend = user.email_timestamp - int(datetime.now().timestamp())
 
     if time_to_resend <= 0:
         time_to_resend = 0
-    context = {'email': user.email, 'time_to_resend': time_to_resend}
+    context = {'email': user.email, 'time_to_resend': time_to_resend, 'token': token}
     return render(
         request,
         'users/create_account_done.html',
@@ -74,12 +78,13 @@ def check_user_token(request):
     return redirect('activate-done')
 
 
-def resending_email(request, email):
+def resending_email(request, email, token):
     user = get_object_or_404(User, email=email)
     if user.is_active:
         return redirect('profile', username=user.username)
+    if not default_token_generator.check_token(user, token):
+        return JsonResponse({'status': 'error'})
     if user.email_timestamp - int(datetime.now().timestamp()) < 0:
         token = default_token_generator.make_token(user)
         send_registration_mail(user, token, email)
-        user.update_email_timestamp()
     return JsonResponse({'status': 'success'})
