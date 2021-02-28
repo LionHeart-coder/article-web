@@ -1,7 +1,7 @@
 from django.urls import path
 
 from users.views import (ActivationDone, ProfileUpdate, SignUp,
-                         check_user_token, create_done, resending_email)
+                         check_user_token, create_done, resending_email, CustomPasswordResetView)
 
 urlpatterns = [
     path('signup/', SignUp.as_view(), name='signup'),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('check-user-token/', check_user_token, name='heck-user-token'),
     path('registration-done/', ActivationDone.as_view(), name='activate-done'),
     path('resending-email/<email>/<token>/', resending_email, name='resending-email'),
+    path('password_reset/', CustomPasswordResetView.as_view(), name='password-reset'),
 ]

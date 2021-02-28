@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.views import PasswordResetView
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -88,3 +89,7 @@ def resending_email(request, email, token):
         token = default_token_generator.make_token(user)
         send_registration_mail(user, token, email)
     return JsonResponse({'status': 'success'})
+
+
+class CustomPasswordResetView(PasswordResetView):
+    html_email_template_name = 'registration/html_password_reset_email.html'
